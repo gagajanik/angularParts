@@ -1,0 +1,154 @@
+@Component
+public class SearchFrom {
+
+    @Autowired
+    private static HttpSession session;
+
+    @PersistenceContext()
+    private EntityManager em;
+
+    public QueryResult<List<SoipMainInfo>, Long> getSearch(CurrentCasesSearch searchData) {
+
+        QueryResult<List<SoipMainInfo>, Long> result = new QueryResult<List<SoipMainInfo>, Long>();
+
+        Map<String, Object> parameters = new TreeMap<String, Object>();
+        StringBuilder sql = new StringBuilder("from SoipMainInfo e where 1=1 ");
+
+
+        if (searchData.getName() != null) {
+            sql.append("and e.name like :name ");
+            parameters.put("name", searchData.getName() + "%");
+        }
+
+        if (searchData.getAddress() != null) {
+            sql.append("and e.address like :address ");
+            parameters.put("address", searchData.getAddress() + "%");
+        }
+
+        if (searchData.getLegalForm() != null) {
+            sql.append(" and e.lfId = :lfId");
+            parameters.put("lfId", searchData.getLegalForm());
+        }
+
+        if (searchData.getIdentCode() != null) {
+            sql.append(" and e.identCode like :identCode ");
+            parameters.put("identCode", searchData.getLegalForm() + "%");
+        }
+
+        if (searchData.getBussinessSphere() != null) {
+            sql.append(" and e.bsId = :bsId ");
+            parameters.put("bsId", searchData.getBussinessSphere());
+        }
+
+        if (searchData.getCountryRegion() != null) {
+            sql.append(" and e.crId = :crId ");
+            parameters.put("crId", searchData.getCountryRegion());
+        }
+
+        if (searchData.getAppGivenNumber() != null) {
+            sql.append(" and e.appGivenNumber = :appGivenNumber ");
+            parameters.put("appGivenNumber", searchData.getAppGivenNumber());
+        }
+
+        if (searchData.getAppGivenDateStart() != null && searchData.getAppGivenDateEnd() != null) {
+            sql.append(" and e.appGivenDate between :appGivenDateStart and :appGivenDateEnd ");
+            parameters.put("appGivenDateStart", searchData.getAppGivenDateStart());
+            parameters.put("appGivenDateEnd", searchData.getAppGivenDateEnd());
+        }
+
+        if (searchData.getNomenCaseNumber() != null) {
+            sql.append(" and e.nomenCaseNumber = :nomenCaseNumber ");
+            parameters.put("nomenCaseNumber", searchData.getNomenCaseNumber());
+        }
+
+        if (searchWithPerson(searchData)) {
+
+            Map<String, Object> personParams = new TreeMap<String, Object>();
+            StringBuilder personSql = new StringBuilder("select smiId from SoipMainPerson where 1=1 ");
+
+            if (searchData.getMainPersonPhone() != null) {
+                personSql.append(" and phoneNumber like :phoneNumber ");
+                personParams.put("phoneNumber", searchData.getMainPersonPhone() + "%");
+            }
+
+            if (searchData.getFirstName() != null) {
+                personSql.append(" and firstName like :firstName ");
+                personParams.put("firstName", searchData.getFirstName() + "%");
+            }
+
+            if (searchData.getLastName() != null) {
+                personSql.append(" and lastName like :lastName ");
+                personParams.put("lastName", searchData.getLastName() + "%");
+            }
+
+            if (searchData.getPrivateNumber() != null) {
+                personSql.append(" and privateNumber like :privateNumber ");
+                personParams.put("privateNumber", searchData.getPrivateNumber());
+            }
+            if (searchData.getPermitNumber() != null) {
+                personSql.append(" and permitNumber like :permitNumber ");
+                personParams.put("permitNumber", searchData.getPermitNumber());
+            }
+            if (searchData.getPermitNumber() != null) {
+                personSql.append(" and permitNumber like :permitNumber ");
+                personParams.put("permitNumber", searchData.getPermitNumber());
+            }
+            if (searchData.getBussinessSphere() != null) {
+                personSql.append(" and permitNumber like :permitNumber ");
+                personParams.put("permitNumber", searchData.getPermitNumber());
+            }
+            TypedQuery<Integer> personResultQuery = em.createQuery(personSql.toString(), Integer.class);
+
+            for (String param : personParams.keySet()) {
+                personResultQuery.setParameter(param, personParams.get(param));
+            }
+
+            List<Integer> ids = personResultQuery.getResultList();
+
+
+            if (!ids.isEmpty()) {
+                sql.append(" and e.id in (:ids) ");
+                parameters.put("ids", ids);
+            } else {
+
+                return result;
+            }
+        }
+
+        TypedQuery<SoipMainInfo> resultQuery = em.createQuery(sql.toString(), SoipMainInfo.class);
+        TypedQuery<Long> countQuery = em.createQuery("select  count(id) " + sql.toString(), Long.class);
+
+        for (String param : parameters.keySet()) {
+            resultQuery.setParameter(param, parameters.get(param));
+            countQuery.setParameter(param, parameters.get(param));
+        }
+
+//        if (searchData.getFirstResult() != null) {
+//            resultQuery.setFirstResult(searchData.getFirstResult());
+//        }
+//        if (searchData.getMaxResult() != null) {
+//            resultQuery.setMaxResults(searchData.getMaxResult());
+//        }
+
+        List<SoipMainInfo> prisones = resultQuery.getResultList();
+
+        Long count = countQuery.getSingleResult();
+        result.setResult(prisones);
+        result.setCount(count);
+
+        return result;
+    }
+
+    private Boolean searchWithPerson(CurrentCasesSearch searchData) {
+
+        if (searchData.getFirstName() != null || searchData.getLastName() != null || searchData.getFathersName() != null ||
+                searchData.getPrivateNumber() != null || searchData.getBirthDate() != null || searchData.getPosition() != null
+                || searchData.getMainPersonPhone() != null || searchData.getAddress() != null
+                || searchData.getCityzen() != null || searchData.getNote() != null) {
+
+            return true;
+        }
+
+        return false;
+    }
+    }
