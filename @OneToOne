@@ -1,0 +1,27 @@
+//soip main info 
+ @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "lf_id")
+    private LegalForm legalForm;
+
+    public LegalForm getLegalForm() {
+        return legalForm;
+    }
+
+    public void setLegalForm(LegalForm legalForm) {
+        this.legalForm = legalForm;
+    }
+
+
+//legal form
+ @OneToOne(mappedBy = "legalForm", cascade = CascadeType.ALL,
+    fetch = FetchType.EAGER, optional = false)
+    @JsonIgnore
+    private SoipMainInfo soipMainInfo;
+
+    public SoipMainInfo getSoipMainInfo() {
+        return soipMainInfo;
+    }
+
+    public void setSoipMainInfo(SoipMainInfo soipMainInfo) {
+        this.soipMainInfo = soipMainInfo;
+    }
