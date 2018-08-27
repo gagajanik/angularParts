@@ -1,0 +1,30 @@
+    @GetMapping("getFile")
+    public void getScannedFile(@RequestParam(value = "fileName", required = true) String fileName, HttpServletResponse response) {
+        //return scannedContractsService.getScannedFile(scannedContractId);
+        FileSystemResource fsr = getFile(fileName);
+
+        try (InputStream inputStream = fsr.getInputStream()) {
+            String content_type = java.nio.file.Files.probeContentType(java.nio.file.FileSystems.getDefault().getPath(fsr.getPath()));
+            if (content_type != null)
+                response.setContentType("application/pdf");
+            IOUtils.copy(inputStream, response.getOutputStream());
+            response.flushBuffer();
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage()+" aqedan ");
+        }
+    }
+
+    public FileSystemResource getFile(String fileName) {
+        String uploadDirs = Paths.get("/tmp").toString();
+        if (uploadDirs.isEmpty())
+            return null;
+        File _file = null;
+
+        File f = new File(uploadDirs, fileName);
+        if (f.exists() && f.canRead()) {
+            _file = f;
+
+        }
+
+        return new FileSystemResource(_file);
+    }
