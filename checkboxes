@@ -1,0 +1,26 @@
+---- on component
+ ids = [];
+  idsObj: Ids;
+  ----- OBJECT
+  export interface Ids {
+  ids: any[];
+}
+----------
+----on component
+  selected(evn) {
+    if (evn.target.checked) {
+      this.ids.push(evn.target.value);
+    } else if (!evn.target.checked) {this.ids.splice(this.ids.indexOf(evn.target.value), 1); }
+  }
+  --------comp del function
+    deleteFewFizicalPerson() {
+    this.idsObj = {
+      ids: this.ids
+    };
+    if (confirm('ნამდვილად გინდათ ჩანაწერის წაშლა?')) {
+      return this._afp.deleteFewFizicalPerson(this.idsObj).subscribe(res => {
+        this.ids = [];
+        return this.fizicalPersonsList = res;;
+      });
+    }
+  }
