@@ -1,0 +1,14 @@
+join table @ManyToOne @OneToMany მაგალითი
+
+დამოკიდებული ცხრილის მხარე: @OneToMany(mappedBy = "soipMainInfo")
+    @Fetch(FetchMode.JOIN)
+    @JsonIgnore
+    private Set<FizicalPerson> fizicalPerson;
+    
+    მთავარი ცხრილის მხარე:  @ManyToOne
+    @JoinTable(
+            name = "main_fiz",
+            joinColumns = @JoinColumn(name = "f_id"),
+            inverseJoinColumns = @JoinColumn(name = "m_id")
+    )
+    private SoipMainInfo soipMainInfo;
