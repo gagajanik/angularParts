@@ -1,0 +1,10 @@
+  @RequestMapping(value = "downloadTestFile", method = RequestMethod.GET)
+    public void getSteamingFile1(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=\"bagi\"");
+        InputStream inputStream = new FileInputStream(new File("/tmp/bagi"));
+        int nRead;
+        while ((nRead = inputStream.read()) != -1) {
+            response.getWriter().write(nRead);
+        }
+    }
