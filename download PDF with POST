@@ -1,0 +1,33 @@
+//angular part
+
+downloadFile(reqObject) {
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    this.http.post('api/fizicalPersonReport', reqObject, {headers: headers, responseType: 'arraybuffer'}).subscribe(data => {
+      const blob = new Blob([data], {type: 'application/pdf'});
+    const objectUrl = URL.createObjectURL(blob);
+    window.open(objectUrl);});
+  }
+  
+  
+  //spring boot part
+      @PostMapping(value = "fizicalPersonReport")
+    public void getFizicalReport(HttpServletResponse response, @RequestBody FizicalPersonSearch searchData){
+        try {
+            Date dt=new Date();
+            InputStream jasperStream=this.getClass().getResourceAsStream("/jasper/fizicalPersonReport.jrxml");
+            JasperDesign design= JRXmlLoader.load(jasperStream);
+            JasperReport report= JasperCompileManager.compileReport(design);
+            Map<String,Object> parameterMap = new HashMap<>();
+            JRDataSource  jrDataSource  = new JRBeanCollectionDataSource(/*fizicalPersonRepository.findAll()*/test(searchData));
+            parameterMap.put("datasource", jrDataSource);
+            JasperPrint jasperPrint= JasperFillManager.fillReport(report,parameterMap,jrDataSource);
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition","inline;filename=fizicalPersonReport.pdf");
+            final OutputStream outputStream=response.getOutputStream();
+            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+
+        }catch (Exception ex){
+            System.err.println(ex.getMessage());
+        }
+    }
