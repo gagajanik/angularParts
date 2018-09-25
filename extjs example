@@ -1,0 +1,67 @@
+ items:[{
+                xtype:'panel',
+                title:'panel',
+                layout:'hbox',
+                items:[{
+                    xtype:'container',
+                    layout:'vbox',
+                    items:[{
+                        xtype:'textfield',
+                        fieldLabel: 'Text field'
+                    },{
+                        xtype : 'menuseparator',
+                        width : '100%'
+                    },{
+                        text: 'separator above'
+                    }, {
+                        xtype:'textfield',
+                        fieldLabel: 'Text field'
+                    }]
+                }, {
+                    xtype:'textfield',
+                    fieldLabel: 'Text field',
+                    maskRe: /[0-9.-]/,
+                    validator: function(value){
+                        return /^-?[0-9]*(\.[0-9]{1,2})?$/.test(v)? true : 'Only positive/negative float (x.yy)/int formats allowed!';
+                    }
+                },{
+                    xtype: 'container',
+                    layout: 'vbox',
+                    items:[
+                        {
+                            xtype:'textfield',
+                            fieldLabel: 'Text field',
+                            maskRe: /[0-9.-]/,
+                            validator: function(value){
+                                return /^-?[0-9]*(\.[0-9]{1,2})?$/.test(v)? true : 'Only positive/negative float (x.yy)/int formats allowed!';
+                            }
+                        }, {
+                            xtype:'textfield',
+                            fieldLabel: 'Text field',
+                            maskRe: /[0-9.-]/,
+                            validator: function(value){
+                                return /^-?[0-9]*(\.[0-9]{1,2})?$/.test(v)? true : 'Only positive/negative float (x.yy)/int formats allowed!';
+                            }
+                        }
+                    ]
+                }]
+        }, {
+            xtype:'panel',
+            title:'panel2',
+            layout:'hbox',
+            margin: '0 0 0 40',
+            collapsible: true,
+            flex : 1,
+            items:[{
+                xtype:'textfield',
+                fieldLabel: 'Text field'
+            }, {
+                xtype:'textfield',
+                fieldLabel: 'Text field',
+                maskRe: /[0-9.-]/,
+                validator: function(value){
+                    return /^-?[0-9]*(\.[0-9]{1,2})?$/.test(v)? true : 'Only positive/negative float (x.yy)/int formats allowed!';
+                }
+            }]
+        }]
+    }]
