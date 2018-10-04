@@ -1,0 +1,106 @@
+npm install jquery --save
+npm install datatables.net --save
+npm install datatables.net-dt --save
+npm install angular-datatables --save
+npm install @types/jquery --save-dev
+npm install @types/datatables.net --save-dev
+
+ "styles": [
+              "node_modules/datatables.net-dt/css/jquery.dataTables.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/datatables.net/js/jquery.dataTables.js"
+            ],
+            
+//ngModul
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { DataTablesModule } from 'angular-datatables';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+
+    DataTablesModule
+  ],
+  providers: [],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule {}
+
+//ts
+
+import * as $ from 'jquery';
+
+options = {
+    'bStateSave': false,
+    'iCookieDuration': 2419200, /* 1 month */
+    'bJQueryUI': false,
+    'bPaginate': true,
+    'bLengthChange': true,
+    'bFilter': true,
+    'bInfo': true,
+    'bDestroy': true,
+    'ordering': true,
+    'language': {
+      'sEmptyTable':     'ცხრილში არ არის მონაცემები',
+      'sInfo':           'ნაჩვენებია ჩანაწერები _START_–დან _END_–მდე, _TOTAL_ ჩანაწერიდან',
+      'sInfoEmpty':      'ნაჩვენებია ჩანაწერები 0–დან 0–მდე, 0 ჩანაწერიდან',
+      'sInfoFiltered':   '(გაფილტრული შედეგი _MAX_ ჩანაწერიდან)',
+      'sInfoPostFix':    '',
+      'sInfoThousands':  '.',
+      'sLengthMenu':     'აჩვენე _MENU_ ჩანაწერი',
+      'sLoadingRecords': 'იტვირთება...',
+      'sProcessing':     'მუშავდება...',
+      'sSearch':         'ძიება:',
+      'sZeroRecords':    'არაფერი მოიძებნა',
+      'oPaginate': {
+        'sFirst':    'პირველი',
+        'sLast':     'ბოლო',
+        'sNext':     'შემდეგი',
+        'sPrevious': 'წინა'
+      },
+      'oAria': {
+        'sSortAscending':  ': სვეტის დალაგება ზრდის მიხედვით',
+        'sSortDescending': ': სვეტის დალაგება კლების მიხედვით'
+      }
+    }
+  };
+
+const table: any = $('#tab1');
+    table.DataTable().destroy();
+    return this.role.getLegalForm().subscribe(res => {
+      this.resultCombos = res;
+      this.chRef.detectChanges();
+      this.dataTable = table.DataTable();
+      table.DataTable(this.options).init();
+    });
+    
+    
+    //html
+      <table id="tab1" class="table table-hover">
+                <thead>
+                <tr>
+                  <th>ჩანაწერები</th>
+                  <th>ქმედება</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let obj of resultCombos" (click)="RowSelected(obj)">
+                      <td  *ngIf="obj.text">
+                       {{obj.text}}
+                      </td>
+                      <td *ngIf="obj.itemName">{{obj.itemName}}</td>
+                      <td><i *ngIf="obj.text" title="ჩანაწერის შესწორება" (click)="editRow(obj.id, obj.text)" data-toggle="modal" data-target="#viewModal" class="glyphicon glyphicon-edit" style="color:blue"></i>
+                        <i *ngIf="obj.itemName" title="ჩანაწერის შესწორება" (click)="editRow(obj.id, obj.itemName)" data-toggle="modal" data-target="#viewModal" class="glyphicon glyphicon-edit" style="color:blue"></i>|
+                        <i title="ჩანაწერის წაშლა" (click)="delElement(obj.id)" class="glyphicon glyphicon-remove" style="color:red"></i></td>
+                    </tr>
+                </tbody>
+              </table>
