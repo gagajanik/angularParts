@@ -1,0 +1,11 @@
+ const oTable = this.dataTable.data().rows({selected: false}).data();
+    const data = oTable.rows({selected:  true}).data();
+    const newarray = [];
+    for (let i = 0; i < data.length ; i++) {
+      /*alert('Name: ' + data[i][0] + ' Address: ' + data[i][1] + ' Office: ' + data[i][2]);*/
+      newarray.push(data[i][0]);
+      newarray.push(data[i][1]);
+    }
+
+    const sData = newarray.join();
+     console.log(sData);
