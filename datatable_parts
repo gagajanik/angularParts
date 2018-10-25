@@ -9,3 +9,13 @@
 
     const sData = newarray.join();
      console.log(sData);
+     
+     
+     
+     /////////
+     if checked example 
+     
+     
+     const anyRowSelected =  table.rows({selected : true}).indexes().length === 0 ? table.rows().data()[0] : '';
+ if (anyRowSelected !== '') {
+ }
