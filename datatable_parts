@@ -19,3 +19,7 @@
      const anyRowSelected =  table.rows({selected : true}).indexes().length === 0 ? table.rows().data()[0] : '';
  if (anyRowSelected !== '') {
  }
+ 
+ ///for modals
+ 
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
