@@ -1,0 +1,41 @@
+Setup Laravel development environment in Linux(Ubuntu)
+Published July 23, 2017
+Laravel is a very popular PHP web development framework. From last two years it’s at the top in the PHP frameworks list.
+
+In this article we’ll see how to setup development environment for Laravel on Linux operating system. Linux have many flavors and distros to setup differs between these on a minor scale.
+
+I personally like setting up virtual machines per project and inside that creating the development environment. This way my original OS (host OS) is not affected and my every project have it’s own dedicated machine, although it virtual but acts like real. This also require that your host machine must have sufficient RAM. If you don’t like creating virtual machines then you can follow these steps directly on your computer.
+
+Skip this if you are not going to use virtual machine. First create a new virtual machine and install ubuntu in it. I use VirtualBox by Oracle. Now login to your newly installed ubuntu system.
+
+Open browser and search for XAMPP. Download XAMPP for Linux.
+
+After download is complete, open terminal and go to the file download location using terminal.
+
+Run these two commands:
+
+chmod 755 XAMPPfilename.run
+sudo ./XAMPPfilename.run
+It will show the UI installer window Follow the steps and install XAMPP on your system. When installation is complete, we need to add the PHP path in the system so that we can run PHP command easily from terminal. Run this command to edit the path environment:
+
+sudo vi /etc/environment
+Now add this in the end of this file.
+
+:/opt/lamp/bin/php
+Now link it by this command:
+
+sudo ln -s /opt/lamp/bin/php /usr/local/bin/php
+Start all xampp services by:
+
+sudo /opt/lamp/lamp start
+XAMPP is properly installed and setup on the system. Now we need to install composer. Composer is dependency manager for PHP applications. Install composer by running these :
+
+curl -s https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+Now go to any location where you want to create your project and from terminal run this command:
+
+composer create-project --prefer-dist laravel/laravel blog
+This will create a new laravel project and then it will install all the dependencies. To run this project go inside the project (your project name) and run this command:
+
+php artisan serve
+You must see default laravel project. Happy coding!
