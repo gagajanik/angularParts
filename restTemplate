@@ -1,0 +1,10 @@
+   @RequestMapping(value = "test2", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody String getPage2() {
+        String accessToken ="eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOiIxMjMiLCJyb2xlIjoiYWRtaW4ifQ.FXDGleOARJDDzeu6Pxfa54BFh17w0D90gWOgLTvLCVrS55Yyz_Cm7nK0RC0cM1Are6eg-V_KD6I14WB8L0kVTQ";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorisation", "Token "+accessToken);
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+        return restTemplate.exchange("http://localhost:8084/rest/hello", HttpMethod.GET, entity, String.class).getBody();
+    }
