@@ -1,0 +1,22 @@
+ @PostMapping(value = "/auth/login")
+    public Optional<User> checkUsers(@RequestBody CredentialsDTO credentials) {
+        String username = credentials.getUsername();
+        String password = credentials.getPassword();
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        User user = new User();
+        user.setUsername(username);
+        token.setDetails(user);
+        Authentication auth = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        Optional<User> usersOptional = Optional.of((User) auth.getPrincipal());
+        return usersOptional;
+    }
+
+    @GetMapping("/auth/logout")
+    public Description<Boolean> logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return Description.valid(true);
+    }
