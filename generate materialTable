@@ -1,0 +1,1 @@
+ng g @angular/material:material-table --name=data-table
