@@ -1,0 +1,25 @@
+---spesifications class 
+ public static Specification<WorkSchema> filterParams(String workName, Long categoryId, Long typeId) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if(workName != null && !workName.isEmpty()){
+                predicates.add(criteriaBuilder.like(root.get("workName"), "%" + workName + "%"));
+            }
+
+
+            if (categoryId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("workCategory").get("id"), categoryId));
+            }
+
+            if (typeId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("workType").get("id"), typeId));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+    
+    workSchemaRepository.findAll(WorkSchemaSpecification.filterParams(workSchema.getWorkName(),
+                workSchema.getWorkCategory().getId(),
+                workSchema.getWorkType().getId()))
+    
