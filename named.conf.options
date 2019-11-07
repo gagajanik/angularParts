@@ -1,0 +1,27 @@
+options {
+  directory "/var/cache/bind";
+
+        recursion yes;
+        allow-recursion { localhost; };
+        listen-on port 53 { localhost; 185.229.111.193; };
+#        allow-query { localhost; };
+        allow-transfer { none; };
+
+        forwarders {
+                1.1.1.1;
+                8.8.4.4;
+        };
+
+        dnssec-validation auto;
+
+        auth-nxdomain no;    # conform to RFC1035
+        listen-on-v6 { none; };
+        querylog yes;
+};
+
+logging {
+        channel querylog {
+                file "/var/log/bind/querylog";
+                severity debug 3;
+        };
+};
